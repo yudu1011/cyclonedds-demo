@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/Demo-Pub.dir/pub.c.o CMakeFiles/Demo-Pub.dir/DemoData.c.o  -o Demo-Pub  /lib/libddsc.so.0.11.0 

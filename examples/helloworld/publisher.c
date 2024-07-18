@@ -16,7 +16,7 @@ int main (int argc, char ** argv)
   (void)argv;
   qos = dds_create_qos ();
   /* Create a Participant. */
-  participant = dds_create_participant (DDS_DOMAIN_DEFAULT, NULL, NULL);
+  participant = dds_create_participant (1, NULL, NULL);
   if (participant < 0)
     DDS_FATAL("dds_create_participant: %s\n", dds_strretcode(-participant));
 
@@ -35,7 +35,7 @@ int main (int argc, char ** argv)
 
   printf("=== [Publisher]  Waiting for a reader to be discovered ...\n");
   fflush (stdout);
-  /* Set a status for writer,waiting for being matched*/
+  /* Set a status for writer, waiting for being matched*/
   rc = dds_set_status_mask(writer, DDS_PUBLICATION_MATCHED_STATUS);
   if (rc != DDS_RETCODE_OK)
     DDS_FATAL("dds_set_status_mask: %s\n", dds_strretcode(-rc));

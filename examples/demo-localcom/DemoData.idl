@@ -1,0 +1,10 @@
+module DemoData
+{
+    struct Msg
+    {
+      @key
+      long userID;
+      string message;
+      string ntime;
+    };
+};

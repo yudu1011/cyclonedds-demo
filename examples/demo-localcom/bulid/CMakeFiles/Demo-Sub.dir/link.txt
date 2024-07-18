@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/Demo-Sub.dir/sub.c.o CMakeFiles/Demo-Sub.dir/DemoData.c.o  -o Demo-Sub  /lib/libddsc.so.0.11.0 
