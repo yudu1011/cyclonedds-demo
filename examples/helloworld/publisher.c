@@ -9,11 +9,12 @@ int main (int argc, char ** argv)
   dds_entity_t topic;
   dds_entity_t writer;
   dds_return_t rc;
+  dds_qos_t *qos;
   HelloWorldData_Msg msg;
   uint32_t status = 0;
   (void)argc;
   (void)argv;
-
+  qos = dds_create_qos ();
   /* Create a Participant. */
   participant = dds_create_participant (DDS_DOMAIN_DEFAULT, NULL, NULL);
   if (participant < 0)
@@ -21,22 +22,25 @@ int main (int argc, char ** argv)
 
   /* Create a Topic. */
   topic = dds_create_topic (
-    participant, &HelloWorldData_Msg_desc, "HelloWorldData_Msg", NULL, NULL);
+    participant, &HelloWorldData_Msg_desc, "HelloWorldData_Msg", qos, NULL);
   if (topic < 0)
     DDS_FATAL("dds_create_topic: %s\n", dds_strretcode(-topic));
 
   /* Create a Writer. */
-  writer = dds_create_writer (participant, topic, NULL, NULL);
+  dds_qset_reliability (qos, DDS_RELIABILITY_RELIABLE, DDS_SECS (10));
+  writer = dds_create_writer (participant, topic, qos, NULL);
   if (writer < 0)
     DDS_FATAL("dds_create_writer: %s\n", dds_strretcode(-writer));
+  dds_delete_qos(qos);
 
   printf("=== [Publisher]  Waiting for a reader to be discovered ...\n");
   fflush (stdout);
-
+  /* Set a status for writer,waiting for being matched*/
   rc = dds_set_status_mask(writer, DDS_PUBLICATION_MATCHED_STATUS);
   if (rc != DDS_RETCODE_OK)
     DDS_FATAL("dds_set_status_mask: %s\n", dds_strretcode(-rc));
 
+  /* Wait a Matched reader*/
   while(!(status & DDS_PUBLICATION_MATCHED_STATUS))
   {
     rc = dds_get_status_changes (writer, &status);
@@ -55,6 +59,7 @@ int main (int argc, char ** argv)
   printf ("Message (%"PRId32", %s)\n", msg.userID, msg.message);
   fflush (stdout);
 
+  /* Write the message into the writer*/
   rc = dds_write (writer, &msg);
   if (rc != DDS_RETCODE_OK)
     DDS_FATAL("dds_write: %s\n", dds_strretcode(-rc));

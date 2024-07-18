@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/listtopics.dir/listtopics.c.o  -o listtopics  /lib/libddsc.so.0.11.0 
