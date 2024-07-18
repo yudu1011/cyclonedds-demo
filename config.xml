@@ -2,15 +2,15 @@
 <CycloneDDS xmlns="https://cdds.io/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
     <Domain Id="any">
         <General>
-	    <Interfaces>
-		    <NetworkInterface address="127.0.0.103"></NetworkInterface>
-		    <NetworkInterface autodetermine="false" priority="default" multicast="default" />
-	    </Interfaces>
-            <AllowMulticast>default</AllowMulticast>
+	        <Interfaces>
+               	    <NetworkInterface priority="1" multicast="default" address="127.0.0.1"/>
+                    <NetworkInterface priority="0" multicast="default" address="192.168.164.65"/>
+	        </Interfaces>
+	        <AllowMulticast>true</AllowMulticast>
+            <EnableMulticastLoopback>true</EnableMulticastLoopback>
             <MaxMessageSize>65500B</MaxMessageSize>
         </General>
-	<Discovery>
-    	    <ExternalDomainId>0</ExternalDomainId>	
+        <Discovery>
 	    <EnableTopicDiscoveryEndpoints>true</EnableTopicDiscoveryEndpoints>
         </Discovery>
         <Internal>
