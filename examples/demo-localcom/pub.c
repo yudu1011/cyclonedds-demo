@@ -62,8 +62,7 @@ int main()
     if (rc != DDS_RETCODE_OK)
         DDS_FATAL("dds_write: %s\n", dds_strretcode(-rc));
     else
-        
-    dds_sleepfor(DDS_MSECS(500));
+    break;
     }
 
     rc = dds_delete (participant);
@@ -72,6 +71,7 @@ int main()
 
     return EXIT_SUCCESS;
 }
+
 void get_strtime(char *time_str)
 {
     time_t nowtime = time(NULL);

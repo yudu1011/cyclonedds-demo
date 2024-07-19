@@ -39,8 +39,6 @@ int main()
     samples[0] = DemoData_Msg__alloc ();
     while (true)
     {
-    /* Do the actual read.
-     * The return value contains the number of read samples. */
         rc = dds_read (reader, samples, infos, MAX_SAMPLES, MAX_SAMPLES);
         if (rc < 0)
         DDS_FATAL("dds_read: %s\n", dds_strretcode(-rc));
@@ -48,12 +46,12 @@ int main()
         /* Check if we read some data and it is valid. */
         if ((rc > 0) && (infos[0].valid_data))
         {
-        /* Print Message. */
         msg = (DemoData_Msg*) samples[0];
         printf ("=== [Subscriber] Received : ");
         printf ("Message (%"PRId32", %s, %s)\n", msg->userID, msg->message, msg->ntime);
         fflush (stdout);
         dds_sleepfor (DDS_MSECS (500));
+        break;
         }
         else
             dds_sleepfor (DDS_MSECS (20));
