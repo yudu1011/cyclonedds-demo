@@ -28,6 +28,7 @@ int main()
 
     qos = dds_create_qos ();
     dds_qset_reliability(qos, DDS_RELIABILITY_RELIABLE, DDS_SECS(10));
+    
     reader = dds_create_reader(participant, topic, qos, NULL);
     if (reader < 0)
         DDS_FATAL("dds_create_reader: %s\n", dds_strretcode(-reader));
@@ -39,7 +40,8 @@ int main()
     samples[0] = DemoData_Msg__alloc ();
     while (true)
     {
-        rc = dds_read (reader, samples, infos, MAX_SAMPLES, MAX_SAMPLES);
+        // rc = dds_read (reader, samples, infos, MAX_SAMPLES, MAX_SAMPLES);
+        rc = dds_take (reader, samples, infos, MAX_SAMPLES, MAX_SAMPLES);
         if (rc < 0)
         DDS_FATAL("dds_read: %s\n", dds_strretcode(-rc));
 
@@ -48,13 +50,13 @@ int main()
         {
         msg = (DemoData_Msg*) samples[0];
         printf ("=== [Subscriber] Received : ");
-        printf ("Message (%"PRId32", %s, %s)\n", msg->userID, msg->message, msg->ntime);
+        printf ("Message (%"PRId32", %s, %"PRIu32")\n", msg->userID, msg->message, msg->ntime);
         fflush (stdout);
-        dds_sleepfor (DDS_MSECS (500));
-        break;
+        // DemoData_Msg_free(samples[0],DDS_FREE_KEY);
         }
-        else
-            dds_sleepfor (DDS_MSECS (20));
+        // 
+        dds_sleepfor (DDS_MSECS (20));
     }
+    DemoData_Msg_free(samples[0],DDS_FREE_KEY);
 
 }

@@ -3,8 +3,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <sys/time.h>
 
 void get_strtime(char *);
+uint32_t get_current_millis();
 int main()
 {
     dds_entity_t participant;
@@ -14,6 +16,7 @@ int main()
     dds_qos_t *qos;
     DemoData_Msg msg;
     uint32_t status = 0;
+    uint32_t user_id = 0;
 
     qos = dds_create_qos();
 
@@ -35,8 +38,8 @@ int main()
     fflush (stdout);
 
     rc = dds_set_status_mask(writer, DDS_PUBLICATION_MATCHED_STATUS);
-        if (rc != DDS_RETCODE_OK)
-    DDS_FATAL("dds_set_status_mask: %s\n", dds_strretcode(-rc));
+    if (rc != DDS_RETCODE_OK)
+        DDS_FATAL("dds_set_status_mask: %s\n", dds_strretcode(-rc));
 
     while(!(status & DDS_PUBLICATION_MATCHED_STATUS))
     {
@@ -44,25 +47,26 @@ int main()
         if (rc != DDS_RETCODE_OK)
             DDS_FATAL("dds_get_status_changes: %s\n", dds_strretcode(-rc));
         
-        dds_sleepfor (DDS_MSECS (100));
+        dds_sleepfor (DDS_MSECS (20));
     }
     while(true)
     {
-    char time_str[100];
-    get_strtime(time_str);
-    msg.userID = 0;
+    // char time_str[100];
+    // get_strtime(time_str);
+    msg.userID = user_id;
     msg.message = "Testing";
-    msg.ntime = time_str;
-
+    // msg.ntime = time(NULL);
+    msg.ntime = get_current_millis();
     printf ("=== [Publisher]  Writing : ");
-    printf ("(%"PRId32", %s, %s)\n", msg.userID, msg.message, msg.ntime);
+    printf ("(%"PRId32", %s, %"PRIu32")\n", msg.userID, msg.message, msg.ntime);
     fflush (stdout);
 
     rc = dds_write (writer, &msg);
     if (rc != DDS_RETCODE_OK)
         DDS_FATAL("dds_write: %s\n", dds_strretcode(-rc));
     else
-    break;
+    user_id ++;
+    dds_sleepfor(DDS_MSECS(200));
     }
 
     rc = dds_delete (participant);
@@ -72,9 +76,15 @@ int main()
     return EXIT_SUCCESS;
 }
 
-void get_strtime(char *time_str)
-{
-    time_t nowtime = time(NULL);
-    struct tm *local_time = localtime(&nowtime);
-    strftime(time_str, 8 * sizeof(time_str), "%Y-%m-%d_%H:%M:%S", local_time);
+// void get_strtime(char *time_str)
+// {
+//     time_t nowtime = time(NULL);
+//     struct tm *local_time = localtime(&nowtime);
+//     strftime(time_str, 8 * sizeof(time_str), "%Y-%m-%d_%H:%M:%S", local_time);
+// }
+uint32_t get_current_millis() {
+    struct timeval time;
+    gettimeofday(&time, NULL);
+    uint32_t millis = (uint32_t)(time.tv_sec) * 1000 + (uint32_t)(time.tv_usec) / 1000;
+    return millis;
 }
