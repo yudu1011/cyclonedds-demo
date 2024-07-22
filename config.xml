@@ -3,24 +3,27 @@
     <Domain Id="any">
         <General>
 	        <Interfaces>
-               	    <NetworkInterface priority="1" multicast="default" address="127.0.0.1"/>
-                    <NetworkInterface priority="0" multicast="default" address="192.168.164.65"/>
+	 	    <!-- <NetworkInterface priority="0" multicast="default" address="10.14.10.112"/> -->
+		    <NetworkInterface priority="0" multicast="default" address="192.168.59.128"/>
+            <!-- <NetworkInterface priority="0" multicast="default" address="127.0.0.1"/> -->
+		    <!-- <NetworkInterface priority="0" multicast="default" address="10.72.218.191"/> -->
+            <!-- <NetworkInterface autodetermine="true" priority="default" multicast="default" /> -->
 	        </Interfaces>
 	        <AllowMulticast>true</AllowMulticast>
             <EnableMulticastLoopback>true</EnableMulticastLoopback>
             <MaxMessageSize>65500B</MaxMessageSize>
         </General>
         <Discovery>
-	    <EnableTopicDiscoveryEndpoints>true</EnableTopicDiscoveryEndpoints>
+	    <EnableTopicDiscoveryEndpoints>false</EnableTopicDiscoveryEndpoints>
         </Discovery>
         <Internal>
             <Watermarks>
                 <WhcHigh>500kB</WhcHigh>
             </Watermarks>
         </Internal>
-        <Tracing>
-            <Verbosity>config</Verbosity>
-            <OutputFile>cdds.log.${CYCLONEDDS_PID}</OutputFile>
-        </Tracing>
+        <!-- <Tracing> -->
+            <!-- <Verbosity>config</Verbosity> -->
+            <!-- <OutputFile>cdds.log.${CYCLONEDDS_PID}</OutputFile> -->
+        <!-- </Tracing> -->
     </Domain>
 </CycloneDDS>

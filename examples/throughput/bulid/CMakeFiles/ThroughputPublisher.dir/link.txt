@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/ThroughputPublisher.dir/publisher.c.o CMakeFiles/ThroughputPublisher.dir/Throughput.c.o  -o ThroughputPublisher  /lib/libddsc.so.0.11.0 

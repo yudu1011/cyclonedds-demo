@@ -71,7 +71,7 @@ int main (int argc, char **argv)
   sample.payload._length = payloadSize;
   sample.payload._release = true;
   for (uint32_t i = 0; i < payloadSize; i++) {
-    sample.payload._buffer[i] = 'a';
+    sample.payload._buffer[i] = 0xaa;
   }
 
   /* Register handler for Ctrl-C */

@@ -1,0 +1,5 @@
+/home/byd/Desktop/cyclonedds/examples/throughput/bulid/CMakeFiles/edit_cache.dir
+/home/byd/Desktop/cyclonedds/examples/throughput/bulid/CMakeFiles/rebuild_cache.dir
+/home/byd/Desktop/cyclonedds/examples/throughput/bulid/CMakeFiles/ThroughputSubscriber.dir
+/home/byd/Desktop/cyclonedds/examples/throughput/bulid/CMakeFiles/ThroughputPublisher.dir
+/home/byd/Desktop/cyclonedds/examples/throughput/bulid/CMakeFiles/Throughput_lib_generate.dir
