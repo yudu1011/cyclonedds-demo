@@ -16,7 +16,7 @@
  * totals and averages.
  */
 
-#define BYTES_PER_SEC_TO_MEGABITS_PER_SEC 125000
+#define BYTES_PER_SEC_TO_MEGABITS_PER_SEC 125000.0
 #define MAX_SAMPLES 1000
 
 typedef struct HandleEntry
@@ -41,6 +41,7 @@ static unsigned long long total_samples = 0;
 static dds_time_t startTime = 0;
 
 static unsigned long payloadSize = 0;
+static unsigned long countSize = 0;
 
 static ThroughputModule_DataType data [MAX_SAMPLES];
 static void * samples[MAX_SAMPLES];
@@ -165,6 +166,7 @@ static int do_take (dds_entity_t reader)
   int samples_received;
   dds_instance_handle_t ph = 0;
   HandleEntry * current = NULL;
+  ThroughputModule_DataType * this_sample;
 
   if (startTime == 0)
   {
@@ -185,7 +187,7 @@ static int do_take (dds_entity_t reader)
     {
       ph = info[i].publication_handle;
       current = retrieve_handle (imap, ph);
-      ThroughputModule_DataType * this_sample = &data[i];
+      this_sample = &data[i];
 
       if (current == NULL)
       {
@@ -202,7 +204,8 @@ static int do_take (dds_entity_t reader)
       /* Add the sample payload size to the total received */
 
       payloadSize = this_sample->payload._length;
-      total_bytes += payloadSize + 8;
+      countSize = sizeof(this_sample->count);
+      total_bytes += payloadSize + countSize;
       total_samples++;
     }
   }
@@ -283,7 +286,7 @@ static void process_samples(dds_entity_t reader, unsigned long long maxCycles)
 
       if (deltaTime >= 1.0 && total_samples != prev_samples)
       {
-        printf ("=== [Subscriber] %5.3f Payload size: %lu | Total received: %llu samples, %llu bytes | Out of order: %llu samples "
+        printf ("=== [Subscriber] %5.3fSec |Payload size: %lu | Total received: %llu samples, %llu bytes| Out of order: %llu samples "
                 "Transfer rate: %.2lf samples/s, %.2lf Mbit/s\n",
                 deltaTime, payloadSize, total_samples, total_bytes, outOfOrder,
                 (deltaTime != 0.0) ? ((double)(total_samples - prev_samples) / deltaTime) : 0,
@@ -307,6 +310,7 @@ static void process_samples(dds_entity_t reader, unsigned long long maxCycles)
   deltaTime = (double) (deltaTv / DDS_NSECS_IN_SEC);
   printf ("\nTotal received: %llu samples, %llu bytes\n", total_samples, total_bytes);
   printf ("Out of order: %llu samples\n", outOfOrder);
+  printf ("Out of order rate: %.2lf%% \n", 100.0* (double)outOfOrder / (double)total_samples);
   printf ("Average transfer rate: %.2lf samples/s, ", (double)total_samples / deltaTime);
   printf ("%.2lf Mbit/s\n", (double)(total_bytes / BYTES_PER_SEC_TO_MEGABITS_PER_SEC) / deltaTime);
   fflush (stdout);
@@ -320,7 +324,9 @@ static dds_entity_t prepare_dds(dds_entity_t *reader, const char *partitionName)
   dds_listener_t *rd_listener;
   dds_entity_t participant;
 
-  int32_t maxSamples = 4000;
+  // int32_t maxSamples = 4000;
+  int32_t maxSamples = MAX_SAMPLES;
+
   const char *subParts[1];
   dds_qos_t *subQos = dds_create_qos ();
   dds_qos_t *tQos = dds_create_qos ();
@@ -334,7 +340,9 @@ static dds_entity_t prepare_dds(dds_entity_t *reader, const char *partitionName)
   /* A Topic is created for our sample type on the domain participant. */
 
   dds_qset_reliability (tQos, DDS_RELIABILITY_RELIABLE, DDS_SECS (10));
+  // dds_qset_reliability (tQos, DDS_RELIABILITY_BEST_EFFORT, DDS_SECS (10));
   dds_qset_history (tQos, DDS_HISTORY_KEEP_ALL, 0);
+  // dds_qset_history (tQos, DDS_HISTORY_KEEP_LAST, 7);
   dds_qset_resource_limits (tQos, maxSamples, DDS_LENGTH_UNLIMITED, DDS_LENGTH_UNLIMITED);
   topic = dds_create_topic (participant, &ThroughputModule_DataType_desc, "Throughput", tQos, NULL);
   if (topic < 0)

@@ -6,14 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/byd/Desktop/cyclonedds/examples/demo-localcom/bulid/DemoData.c
-DemoData.h
-/home/byd/Desktop/cyclonedds/examples/demo-localcom/bulid/DemoData.h
-
-/home/byd/Desktop/cyclonedds/examples/demo-localcom/bulid/DemoData.h
-dds/ddsc/dds_public_impl.h
-/home/byd/Desktop/cyclonedds/examples/demo-localcom/bulid/dds/ddsc/dds_public_impl.h
-
 /home/byd/Desktop/cyclonedds/examples/demo-localcom/pub.c
 dds/dds.h
 /home/byd/Desktop/cyclonedds/examples/demo-localcom/dds/dds.h

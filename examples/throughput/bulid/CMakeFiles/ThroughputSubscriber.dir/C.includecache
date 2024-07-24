@@ -6,14 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/byd/Desktop/cyclonedds/examples/throughput/bulid/Throughput.c
-Throughput.h
-/home/byd/Desktop/cyclonedds/examples/throughput/bulid/Throughput.h
-
-/home/byd/Desktop/cyclonedds/examples/throughput/bulid/Throughput.h
-dds/ddsc/dds_public_impl.h
-/home/byd/Desktop/cyclonedds/examples/throughput/bulid/dds/ddsc/dds_public_impl.h
-
 /home/byd/Desktop/cyclonedds/examples/throughput/subscriber.c
 dds/dds.h
 /home/byd/Desktop/cyclonedds/examples/throughput/dds/dds.h

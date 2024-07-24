@@ -3,6 +3,7 @@ module ThroughputModule
   @final
   struct DataType
   {
+    @key
     unsigned long long count;
     sequence<octet> payload;
   };

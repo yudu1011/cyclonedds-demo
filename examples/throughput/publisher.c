@@ -16,7 +16,7 @@
  * totals and averages.
  */
 
-#define MAX_SAMPLES 100
+#define MAX_SAMPLES 1000
 
 static bool done = false;
 
@@ -155,7 +155,9 @@ static dds_entity_t prepare_dds(dds_entity_t *writer, const char *partitionName)
   /* A topic is created for our sample type on the domain participant. */
   tQos = dds_create_qos ();
   dds_qset_reliability (tQos, DDS_RELIABILITY_RELIABLE, DDS_SECS (10));
+  // dds_qset_reliability (tQos, DDS_RELIABILITY_BEST_EFFORT, DDS_SECS (10));
   dds_qset_history (tQos, DDS_HISTORY_KEEP_ALL, 0);
+  // dds_qset_history (tQos, DDS_HISTORY_KEEP_LAST, 7);  
   dds_qset_resource_limits (tQos, MAX_SAMPLES, DDS_LENGTH_UNLIMITED, DDS_LENGTH_UNLIMITED);
   topic = dds_create_topic (participant, &ThroughputModule_DataType_desc, "Throughput", tQos, NULL);
   if (topic < 0)

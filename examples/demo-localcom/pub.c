@@ -5,7 +5,7 @@
 #include <time.h>
 #include <sys/time.h>
 
-void get_strtime(char *);
+// void get_strtime(char *);
 uint32_t get_current_millis();
 int main()
 {
@@ -16,7 +16,8 @@ int main()
     dds_qos_t *qos;
     DemoData_Msg msg;
     uint32_t status = 0;
-    uint32_t user_id = 0;
+    msg.userID = 0;
+    msg.message = "Testing";
 
     qos = dds_create_qos();
 
@@ -53,8 +54,7 @@ int main()
     {
     // char time_str[100];
     // get_strtime(time_str);
-    msg.userID = user_id;
-    msg.message = "Testing";
+    // msg.message = "Testing";
     // msg.ntime = time(NULL);
     msg.ntime = get_current_millis();
     printf ("=== [Publisher]  Writing : ");
@@ -65,7 +65,8 @@ int main()
     if (rc != DDS_RETCODE_OK)
         DDS_FATAL("dds_write: %s\n", dds_strretcode(-rc));
     else
-    user_id ++;
+
+    msg.userID ++;
     dds_sleepfor(DDS_MSECS(200));
     }
 
