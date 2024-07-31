@@ -193,6 +193,8 @@ static int do_take (dds_entity_t reader)
       {
         current = store_handle (imap, ph);
         current->count = this_sample->count;
+        payloadSize = this_sample->payload._length;
+        countSize = sizeof(this_sample->count);
       }
 
       if (this_sample->count != current->count)
@@ -202,9 +204,6 @@ static int do_take (dds_entity_t reader)
       current->count = this_sample->count + 1;
 
       /* Add the sample payload size to the total received */
-
-      payloadSize = this_sample->payload._length;
-      countSize = sizeof(this_sample->count);
       total_bytes += payloadSize + countSize;
       total_samples++;
     }
@@ -265,17 +264,16 @@ static void process_samples(dds_entity_t reader, unsigned long long maxCycles)
   {
     if (pollingDelay > 0)
       dds_sleepfor (DDS_MSECS (pollingDelay));
-    else
-    {
-      status = dds_waitset_wait (waitSet, wsresults, sizeof(wsresults)/sizeof(wsresults[0]), DDS_MSECS(100));
-      if (status < 0)
-        DDS_FATAL("dds_waitset_wait: %s\n", dds_strretcode(-status));
-    }
+    // else
+    // {
+    //   status = dds_waitset_wait (waitSet, wsresults, sizeof(wsresults)/sizeof(wsresults[0]), DDS_MSECS(100));
+    //   if (status < 0)
+    //     DDS_FATAL("dds_waitset_wait: %s\n", dds_strretcode(-status));
+    // }
 
     if (pollingDelay >= 0)
     {
-      while (do_take (reader))
-        ;
+      while (do_take (reader));
     }
 
     time_now = dds_time();

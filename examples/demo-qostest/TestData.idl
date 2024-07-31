@@ -1,0 +1,12 @@
+module TestQoSModule
+{
+  @final
+  struct DataType
+  {
+    @key
+    unsigned long long count;
+    unsigned long long timestamp;
+    sequence<octet> payload;
+    octet crcCode;
+  };
+};

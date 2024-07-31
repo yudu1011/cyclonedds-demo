@@ -52,7 +52,10 @@ int main (int argc, char **argv)
   if (parse_args(argc, argv, &payloadSize, &burstInterval, &burstSize, &timeOut, &partitionName) == EXIT_FAILURE) {
     return EXIT_FAILURE;
   }
-
+  if (burstSize > 1000){
+    printf("warning: burstSize too big, May lead to data loss！");
+    fflush(stdout);
+  }
   participant = prepare_dds(&writer, partitionName);
 
   /* Wait until have a reader */
@@ -104,7 +107,7 @@ static int parse_args(
   if (argc == 2 && (strcmp (argv[1], "-h") == 0 || strcmp (argv[1], "--help") == 0))
   {
     printf ("Usage (parameters must be supplied in order):\n");
-    printf ("./publisher [payloadSize (bytes)] [burstInterval (ms)] [burstSize (samples)] [timeOut (seconds)] [partitionName]\n");
+    printf ("./publisher [payloadSize (bytes)] [burstInterval (ms)] [burstSize (samples)[1-1000]] [timeOut (seconds)] [partitionName]\n");
     printf ("Defaults:\n");
     printf ("./publisher 8192 0 1 0 \"Throughput example\"\n");
     return EXIT_FAILURE;
